@@ -1,0 +1,23 @@
+//@version=5
+strategy("Simple Moving Average Crossover", shorttitle="SMA Crossover", overlay=true)
+
+// Inputs
+shortMA_length = input.int(9, title="Short MA Length", minval=1)
+longMA_length = input.int(21, title="Long MA Length", minval=1)
+
+// Moving Averages
+shortMA = ta.sma(close, shortMA_length)
+longMA = ta.sma(close, longMA_length)
+
+// Plotting
+plot(shortMA, title="Short MA", color=color.blue, linewidth=2)
+plot(longMA, title="Long MA", color=color.red, linewidth=2)
+
+// Strategy Logic
+longCondition = ta.crossover(shortMA, longMA)
+if (longCondition)
+    strategy.entry("Buy", strategy.long)
+
+shortCondition = ta.crossunder(shortMA, longMA)
+if (shortCondition)
+    strategy.close("Buy")
